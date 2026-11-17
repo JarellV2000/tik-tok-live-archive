@@ -1,0 +1,7 @@
+services:
+  recorder:
+    image: michele0303/tiktok-live-recorder:latest
+    restart: unless-stopped
+    command: ["-output", "/output", "-user", "${USERNAME:-daniimonaee}", "-mode", "automatic", "-automatic_interval", "1"]
+    volumes:
+      - ./recordings:/output

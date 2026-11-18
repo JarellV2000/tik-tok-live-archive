@@ -1,0 +1,39 @@
+name: LIVE VAULT iPhone Preview
+on:
+  push:
+    branches: [feature/live-vault-v1]
+    paths:
+      - 'live-vault/**'
+      - '.github/workflows/live-vault-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: live-vault-pages-preview
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout preview branch
+        uses: actions/checkout@v4
+      - name: Prepare isolated preview
+        run: |
+          mkdir -p _preview
+          cp live-vault/index.html _preview/index.html
+          printf '%s\n' 'LIVE VAULT development preview — not a recording server' > _preview/README.txt
+          touch _preview/.nojekyll
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload preview
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _preview
+      - name: Deploy preview
+        id: deployment
+        uses: actions/deploy-pages@v4

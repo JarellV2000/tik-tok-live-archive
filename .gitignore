@@ -1,0 +1,6 @@
+recordings/
+*.ts
+*.mp4
+__pycache__/
+.env
+live-vault-watchlist.json
